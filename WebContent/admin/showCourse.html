@@ -1,0 +1,24 @@
+<meta charset="utf-8">
+<style>
+table#show_course{
+	height:1000px;
+}
+</style>
+<table id="show_course" style="height:520px;width:100%"></table> 
+<script type="text/javascript">
+//加载表格
+$('#show_course').datagrid({
+    url:'../course.do?op=findCourse',
+    
+    pageList:[3,6,9],
+    pageSize:6,
+    pagination:true,//分页的工具栏
+    columns:[[
+        {field:'cid',title:'课程编号',width:'18%'},
+        {field:'cname',title:'课程名称',width:'18%'},
+        {field:'ctype',title:'课程类型',width:'18%'},
+    ]],
+    
+});
+
+   

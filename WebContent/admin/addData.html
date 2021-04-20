@@ -1,0 +1,66 @@
+<meta charset="UTF-8">
+<style>
+#data div{
+	width:400px;
+}
+#data{
+	margin-left: 400px;
+}
+
+</style>
+        <form id="data" method="post" enctype="multipart/form-data">
+        	 <div style="margin-bottom:20px" class="gname">
+				<h3>上传资料</h3>
+            </div>
+        
+             <div style="margin-bottom:20px">
+                <select class="easyui-combobox typeNo" name="dtype" label="资料类型" style="width:100%">
+                	<option value="语文">语文</option>
+                	<option value="数学">数学</option>
+                	<option value="英语">英语</option>
+                	<option value="物理">物理</option>
+                	<option value="化学">化学</option>
+                	<option value="生物">生物</option>
+                	<option value="地理">地理</option>
+                	<option value="政治">政治</option>
+                	<option value="历史">历史</option>
+				</select>
+            </div>
+         
+            <div style="margin-bottom:20px">
+                <input type="file" name="file" style="width:100%;height:40px" data-options="label:'文件',multiline:true">
+            </div>
+          
+           <div style="text-align:center;padding:5px 0">
+            	<a href="javascript:void(0)" class="easyui-linkbutton add_file"  style="width:80px">添加</a>
+        	</div>
+        </form>
+<script type="text/javascript">
+	$('#data .add_file').click(function(){
+		//表单提交
+		$('#data').form('submit', {
+		    url:'../data.do?op=add',
+		    onSubmit: function(){
+		        // do some check
+		        // return false to prevent submit;
+		    },
+		    success:function(data){
+		        if(data==1){
+		        	$.messager.show({
+		        		title:'温馨提示',
+		        		msg:'上传成功',
+		        		timeout:5000,
+		        		showType:'slide'
+		        	});
+		        	$('#data').form('clear');
+		        }else{
+		        	alert('上传失败');
+		        }
+		    }
+		});
+	});
+
+
+</script>
+       
+

@@ -1,0 +1,58 @@
+<meta charset="utf-8">
+<style>
+table#show_teacher{
+	height:1000px;
+}
+</style>
+<div style="margin-top:20px;width:100%">
+       <label>教师名：</label><input class="namet" class="easyui-validatebox">
+		<a class="easyui-linkbutton" href="javascript:doSearchT()">查询</a>
+</div>
+<table id="show_teacher" style="height:520px;width:100%"></table> 
+<script type="text/javascript">
+//加载表格
+$('#show_teacher').datagrid({
+    url:'../teacher.do?op=find',
+    
+    pageList:[3,6,9],
+    pageSize:6,
+    pagination:true,//分页的工具栏
+    columns:[[
+        {field:'tid',title:'教师编号',width:'18%'},
+        {field:'tname',title:'教师名',width:'18%'},
+        {field:'tsex',title:'性别',width:'18%'},
+        {field:'ttel',title:'教师电话号',width:'18%'},
+        {field:'aa',title:'操作',width:'10%',
+			formatter: function(value,row,index){
+				return '<a href="javascript:deletes('+row.tid+')">删除</a>';
+		}}
+        
+    ]],
+    
+});
+
+
+//根据条件查看
+function doSearchT(){
+	//获取名称
+	var tname=$('.namet').val();
+	$('#show_teacher').datagrid('load', {
+	    tname:tname
+	});
+}
+
+//删除
+function deletes(tid){
+	$.post("../teacher.do",{op:'delete',tid:tid},function(data){
+		if(data==1){
+			var tab = $('#show_center').tabs('getSelected');  // 获取选择的面板
+			tab.panel('refresh', 'showTea.html');
+		}else{
+			alert('删除失败');
+		}
+	});
+	
+}
+
+
+   

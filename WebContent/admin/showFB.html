@@ -1,0 +1,65 @@
+<meta charset="utf-8">
+<style>
+table#show_FB{
+	height:1000px;
+}
+</style>
+
+<table id="show_FB" style="height:520px;width:100%"></table> 
+<script type="text/javascript">
+//加载表格
+$('#show_FB').datagrid({
+    url:'../fb.do?op=find',
+    
+    pageList:[3,6,9],
+    pageSize:6,
+    pagination:true,//分页的工具栏
+    columns:[[
+        {field:'fid',title:'反馈号',width:'10%'},
+        {field:'fname',title:'反馈主题',width:'20%'},
+        {field:'fcon',title:'反馈内容',width:'60%'}
+    ]],
+    
+});
+
+
+//根据条件查看
+function doSearch(){
+	//获取名称
+	var fname=$('.names').val();
+	var types=$('.types').val();
+	$('#show_goods').datagrid('load', {
+		typeNO:types,
+	    goodsName:fname
+	});
+}
+
+//删除
+function deleteGoods(goodsNo){
+	$.post("../../good.action",{op:'deleteGoods',goodsNo:goodsNo},function(data){
+		if(data==1){
+			var tab = $('#show_center').tabs('getSelected');  // 获取选择的面板
+			tab.panel('refresh', 'showGoods.html');
+		}else{
+			alert('删除失败');
+		}
+	});
+	
+}
+
+//修改
+function updateGoods(goodsNo){
+	
+	$('#show_center').tabs('add',{
+		title:'修改',
+		href:'../../good.action?op=saveNo&goodsNo='+goodsNo,
+		fit:true,
+		tools:[{
+		   iconCls:'icon-clear',
+		   handler:function(){
+			   $('#show_center').tabs('close','修改'); 
+		     }
+		 }]
+	});
+}
+   

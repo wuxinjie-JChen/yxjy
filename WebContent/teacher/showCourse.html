@@ -1,0 +1,76 @@
+<meta charset="utf-8">
+<style>
+table#show_course{
+	height:1000px;
+}
+</style>
+<div style="margin-top:20px;width:100%">
+       	<select class="easyui-combobox scstate" name="scstate" labelPosition="top" style="width:100px;"
+           data-options="limitToList:true">
+           		<option value="">考勤状态</option>
+                <option value="0">未开课</option>
+                <option value="1">未到</option>
+                <option value="2">已到</option>
+                <option value="3">请假</option>
+        </select>
+       <label>课程名称：</label><input class="namec" class="easyui-validatebox">
+         <label>学生名称：</label><input class="names" class="easyui-validatebox">
+		<a class="easyui-linkbutton" href="javascript:doSearchCourse()">查询</a>
+</div>
+<table id="show_course" style="height:520px;width:100%"></table> 
+<script type="text/javascript">
+//加载表格
+$('#show_course').datagrid({
+    url:'../course.do?op=findByTeacher',
+    
+    pageList:[3,6,9],
+    pageSize:6,
+    pagination:true,//分页的工具栏
+    columns:[[
+		{field:'scid',title:'课程编号',width:'9%'},
+		{field:'sname',title:'学生名称',width:'9%'},
+        {field:'cname',title:'课程名称',width:'9%'},
+        {field:'ctype',title:'课程类型',width:'9%'},
+        {field:'scdaytime',title:'课程时间',width:'9%'},
+        {field:'scqtime',title:'具体时间',width:'9%',
+        	formatter: function(value,row,index){
+        		if(value==1){
+        			return '8.00-10.00';
+        		}else if(value==2){
+        			return '10.20-12.20';
+        		}else if(value==3){
+        			return '14.00-16.00';
+        		}else if(value==4){
+        			return '16.20-18.20';
+        		}
+		}},
+        {field:'scstate',title:'考勤状态',width:'9%',
+			formatter: function(value,row,index){
+				if(value==0){
+        			return '未开课';
+        		}else if(value==1){
+        			return '未到';
+        		}else if(value==2){
+        			return '已到';
+        		}else if(value==3){
+        			return '请假';
+        		}
+		}},
+    ]],
+    
+});
+
+
+//根据条件查看
+function doSearchCourse(){
+	//获取名称
+	var sname=$('.names').val();
+	var namec=$('.namec').val();
+	var scstate=$('.scstate').val();
+	$('#show_course').datagrid('load', {
+		sname:sname,
+		cname:namec,
+		scstate:scstate
+	});
+}
+

@@ -1,0 +1,59 @@
+<meta charset="utf-8">
+<style>
+table#show_student{
+	height:1000px;
+}
+</style>
+<div style="margin-top:20px;width:100%">
+       <label>学生名：</label><input class="names" class="easyui-validatebox">
+		<a class="easyui-linkbutton" href="javascript:doSearchS()">查询</a>
+</div>
+<table id="show_student" style="height:520px;width:100%"></table> 
+<script type="text/javascript">
+//加载表格
+$('#show_student').datagrid({
+    url:'../student.do?op=find',
+    
+    pageList:[3,6,9],
+    pageSize:6,
+    pagination:true,//分页的工具栏
+    columns:[[
+        {field:'sid',title:'学生编号',width:'10%'},
+        {field:'sname',title:'学生名',width:'19%'},
+        {field:'ssex',title:'性别',width:'10%'},
+        {field:'qq',title:'QQ邮箱',width:'19%'},
+        {field:'stel',title:'学生电话号',width:'19%'},
+        {field:'aa',title:'操作',width:'20%',
+			formatter: function(value,row,index){
+				return '<a href="javascript:deletes('+row.sid+')">删除</a>';
+		}}
+        
+    ]],
+    
+});
+
+
+//根据条件查看
+function doSearchS(){
+	//获取名称
+	var sname=$('.names').val();
+	$('#show_student').datagrid('load', {
+	    sname:sname
+	});
+}
+
+//删除
+function deletes(sid){
+	$.post("../student.do",{op:'delete',sid:sid},function(data){
+		if(data==1){
+			var tab = $('#show_center').tabs('getSelected');  // 获取选择的面板
+			tab.panel('refresh', 'showStudent.html');
+		}else{
+			alert('删除失败');
+		}
+	});
+	
+}
+
+
+   

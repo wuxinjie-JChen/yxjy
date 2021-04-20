@@ -1,0 +1,69 @@
+<meta charset="utf-8">
+<style>
+table#show_data{
+	height:1000px;
+}
+</style>
+<div style="margin-top:20px;width:100%">
+       	<select class="easyui-combobox dtype" name="dtype" labelPosition="top" style="width:100px;"
+           data-options="limitToList:true">
+           		<option value="">所有类型</option>
+               <option value="语文">语文</option>
+                	<option value="数学">数学</option>
+                	<option value="英语">英语</option>
+                	<option value="物理">物理</option>
+                	<option value="化学">化学</option>
+                	<option value="生物">生物</option>
+                	<option value="地理">地理</option>
+                	<option value="政治">政治</option>
+                	<option value="历史">历史</option>
+        </select>
+       <label>资料名称：</label><input class="dname" class="easyui-validatebox">
+		<a class="easyui-linkbutton" href="javascript:doSearchdatat()">查询</a>
+</div>
+<table id="show_data" style="height:520px;width:100%"></table> 
+<script type="text/javascript">
+//加载表格
+$('#show_data').datagrid({
+    url:'../data.do?op=find',
+    
+    pageList:[3,6,9],
+    pageSize:6,
+    pagination:true,//分页的工具栏
+    columns:[[
+        {field:'did',title:'资料号',width:'20%'},
+        {field:'dname',title:'资料名称',width:'20%'},
+        {field:'dtype',title:'资料类型',width:'20%'},
+        {field:'aa',title:'操作',width:'20%',
+			formatter: function(value,row,index){
+				return '<a href="../download.do?did='+row.did+'">下载</a>';
+		}}
+    ]],
+    
+});
+
+
+//根据条件查看
+function doSearchdatat(){
+	//获取名称
+	var dname=$('.dname').val();
+	var dtype=$('.dtype').val();
+	$('#show_data').datagrid('load', {
+		dname:dname,
+		dtype:dtype
+	});
+}
+
+
+//下载
+function download(did){
+	$.post("../data.do",{op:'download',did:did},function(data){
+		if(data==1){
+			var tab = $('#show_center').tabs('getSelected');  // 获取选择的面板
+			tab.panel('refresh', 'showData.html');
+		}else{
+			alert('下载失败');
+		}
+	});
+}
+   

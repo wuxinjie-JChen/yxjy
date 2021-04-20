@@ -1,0 +1,82 @@
+<meta charset="utf-8">
+<style>
+table#show_course{
+	height:1000px;
+}
+</style>
+<div style="margin-top:20px;width:100%">
+       	<select class="easyui-combobox types" name="state" labelPosition="top" style="width:100px;"
+           data-options="limitToList:true">
+           		<option value="">所有类型</option>
+                <option value="语文">语文</option>
+                <option value="数学">数学</option>
+                	<option value="英语">英语</option>
+                	<option value="物理">物理</option>
+                	<option value="化学">化学</option>
+                	<option value="生物">生物</option>
+                	<option value="地理">地理</option>
+                	<option value="政治">政治</option>
+                	<option value="历史">历史</option>
+        </select>
+       <label>课程名称：</label><input class="namec" class="easyui-validatebox">
+        <label>教师名称：</label><input class="namet" class="easyui-validatebox">
+		<a class="easyui-linkbutton" href="javascript:doSearchcoursest()">查询</a>
+</div>
+<table id="show_course" style="height:520px;width:100%"></table> 
+<script type="text/javascript">
+//加载表格
+$('#show_course').datagrid({
+    url:'../course.do?op=findByStudent',
+    
+    pageList:[3,6,9],
+    pageSize:6,
+    pagination:true,//分页的工具栏
+    columns:[[
+		{field:'scid',title:'课程编号',width:'9%'},
+		{field:'tname',title:'教师名称',width:'9%'},
+        {field:'cname',title:'课程名称',width:'9%'},
+        {field:'ctype',title:'课程类型',width:'9%'},
+        {field:'scdaytime',title:'课程时间',width:'9%'},
+        {field:'scqtime',title:'具体时间',width:'9%',
+        	formatter: function(value,row,index){
+        		if(value==1){
+        			return '8.00-10.00';
+        		}else if(value==2){
+        			return '10.20-12.20';
+        		}else if(value==3){
+        			return '14.00-16.00';
+        		}else if(value==4){
+        			return '16.20-18.20';
+        		}
+		}},
+        {field:'scstate',title:'课程状态',width:'9%',
+			formatter: function(value,row,index){
+				if(value==0){
+        			return '未开课';
+        		}else if(value==1){
+        			return '未到';
+        		}else if(value==2){
+        			return '已到';
+        		}else if(value==3){
+        			return '请假';
+        		}
+		}},
+    ]],
+    
+});
+
+
+//根据条件查看
+function doSearchcoursest(){
+	//获取名称
+	var types=$('.types').val();
+	var namet=$('.namet').val();
+	var namec=$('.namec').val();
+	$('#show_course').datagrid('load', {
+		tname:namet,
+		cname:namec,
+		ctype:types
+	});
+}
+
+   
